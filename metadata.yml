@@ -1,0 +1,8 @@
+name: activedirectory
+type: collector
+maintainer: core
+license: Apache-2.0
+description: "Collects Windows Active Directory metrics"
+badge:
+ci:
+status: "Experimental"  
