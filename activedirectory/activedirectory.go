@@ -11,26 +11,28 @@ import (
 type ActiveDirectoryCollector struct {
 }
 
+var availableMetrics = []string{
+	"dra_inbound_bytes",
+	"dra_inbound_objects",
+	"dra_inbound_values",
+	"dra_outbound_bytes",
+	"dra_outbound_objects",
+	"dra_outbound_values",
+	"dra_pending_replication_syncs",
+	"ds_client_binds",
+	"ds_directory_reads",
+	"ds_directory_searches",
+	"ds_directory_writes",
+	"kdc_as_requests",
+	"kdc_tgs_requests",
+	"kerberos_authentications",
+	"ldap_bind_time",
+	"ldap_client_session",
+	"ldap_searches",
+	"ldap_successful_binds",
+	"ldap_writes"}
+
 func stringInNamespace(givenString string) bool {
-	availableMetrics := []string{"dra_inbound_bytes",
-		"dra_inbound_objects",
-		"dra_inbound_values",
-		"dra_outbound_bytes",
-		"dra_outbound_objects",
-		"dra_outbound_values",
-		"dra_pending_replication_syncs",
-		"ds_client_binds",
-		"ds_directory_reads",
-		"ds_directory_searches",
-		"ds_directory_writes",
-		"kdc_as_requests",
-		"kdc_tgs_requests",
-		"kerberos_authentications",
-		"ldap_bind_time",
-		"ldap_client_session",
-		"ldap_searches",
-		"ldap_successful_binds",
-		"ldap_writes"}
 	for _, metricName := range availableMetrics {
 		if metricName == givenString {
 			return true
@@ -50,20 +52,22 @@ func (ActiveDirectoryCollector) CollectMetrics(mts []plugin.Metric) ([]plugin.Me
 	// Iterate through metrics first time to create slice of metric names
 	metricNames := make([]string, 0)
 	for _, mt := range mts {
-		metricNames = append(metricNames, mt.Namespace[len(mt.Namespace)-1].Value)
+		fullNameSpace := mt.Namespace[2].Value + "_" + mt.Namespace[3].Value
+		metricNames = append(metricNames, fullNameSpace)
 	}
 	// Get metric data from powershell script if data has not been set already (for testing). -1 means there was an error getting that metric from system
 	counterData := GetPowershellData(metricNames)
 	// Iterate through each of the metrics specified by task to collect
 	for idx, mt := range mts {
+		fullNameSpace := mt.Namespace[2].Value + "_" + mt.Namespace[3].Value
 		// Make sure the metric given in the Task is actually a metric provided by this plugin
-		if stringInNamespace(mt.Namespace[len(mt.Namespace)-1].Value) {
+		if stringInNamespace(fullNameSpace) {
 			mts[idx].Timestamp = time.Now() // Set metric timestamp
 			// Make sure config hasn't been set for testing (SEE activedirectory_test.go)
 			if val, err := mt.Config.GetFloat("testfloat"); err == nil {
 				mts[idx].Data = val
 			} else {
-				mts[idx].Data = counterData[mt.Namespace[len(mt.Namespace)-1].Value] // Set metric value
+				mts[idx].Data = counterData[fullNameSpace] // Set metric value
 			}
 			metrics = append(metrics, mts[idx])
 		} else {
@@ -85,79 +89,79 @@ func (ActiveDirectoryCollector) GetMetricTypes(cfg plugin.Config) ([]plugin.Metr
 	mts := []plugin.Metric{}
 
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_bytes"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_bytes"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_objects"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_objects"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_values"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_values"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_bytes"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_bytes"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_objects"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_objects"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_values"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_values"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_pending_replication_syncs"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "pending_replication_syncs"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_client_binds"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "client_binds"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_reads"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_reads"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_searches"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_searches"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_writes"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_writes"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "kerberos_authentications"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "kerberos", "authentications"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc_as_requests"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc", "as_requests"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc_tgs_requests"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc", "tgs_requests"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_bind_time"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "bind_time"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_client_session"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "client_session"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_searches"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "searches"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_successful_binds"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "successful_binds"),
 		Version:   1,
 	})
 	mts = append(mts, plugin.Metric{
-		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_writes"),
+		Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "writes"),
 		Version:   1,
 	})
 

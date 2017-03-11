@@ -2,12 +2,13 @@ package activedirectory
 
 import (
 	"bytes"
-	"fmt"
 	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
 	"sync"
+
+	. "github.com/intelsdi-x/snap-plugin-utilities/logger"
 )
 
 /*
@@ -15,9 +16,13 @@ import (
  * Returns a map of metric names to their values
  */
 func GetPowershellData(mts []string) map[string]float64 {
+	LogDebug("Begin gathering metric data from system", "metric_count", len(mts))
+
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	// Map to store all the metrics with their values to pass to perfmon.go
+	// Map to store all the metrics with their values to pass to activedirectory.go
 	metricValues := make(map[string]float64)
+	var mutex = &sync.Mutex{} // will synchronize access to to shared state (metricValues) across multiple goroutines
+
 	// Have powershell command available for each metric name
 	argValues := map[string]string{
 		"dra_inbound_bytes":             "(get-counter -Counter \"\\NTDS\\DRA Inbound Bytes Total/sec\" -ErrorAction Stop).CounterSamples.CookedValue",
@@ -49,6 +54,7 @@ func GetPowershellData(mts []string) map[string]float64 {
 	for _, metricName := range mts {
 		go func(metricName string) {
 			defer wg.Done() // defer pushes function call onto a list. Function is executed after surrounding function (goroutine) returns.
+			var metricValue float64
 			// Command() returns a Cmd struct to execute named program with args, which is then executed by Run() further down
 			cmdArg := argValues[metricName]
 			cmd := exec.Command(cmdName, cmdArg)
@@ -60,23 +66,24 @@ func GetPowershellData(mts []string) map[string]float64 {
 			cmd.Stderr = &stderr
 			// Run() starts the command and waits for it to complete; typically returns error as type *ExitError - this doesn't provide sufficient error detail, so I use Stderr property of Command object as well
 			err := cmd.Run()
-			// If there is an error with command execution, print it out, but keep going to get all the other metric values (don't return)
+			// If there is an error with command execution, set metricValue to -1, and return this metric
 			if err != nil {
-				fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+				metricValue = -1
+				return
 			}
-
-			/* // For testing onl - Print out result of command; nothing if there was an error with powershell; could potentially parse out error (from stderr) and return that as the result
-			   fmt.Printf("Result for %v: %v", metricName, counterOut.String()) */
-
 			// counterOut.String() adds a newline for some reason, so it must be removed first
 			metricValue, formatErr := strconv.ParseFloat(strings.TrimSpace(counterOut.String()), 64)
 			// Check to see if there was an error in parsing the value (this could happen if there are multiple values returned(doing (*) instead of (_total)), if no values are returned, or if the counter cannot be found on the system)
 			if formatErr != nil {
-				fmt.Printf("There was an error with %v! It is: %v", metricName, formatErr)
+				errorMessage := "There was an error with " + metricName
+				LogError(errorMessage, "error", formatErr)
 				metricValue = -1
 			}
 
+			mutex.Lock()
 			metricValues[metricName] = metricValue
+			mutex.Unlock()
+
 		}(metricName)
 	}
 

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
-
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -17,7 +16,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_inbound_bytes metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_bytes"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_bytes"),
 					Config:    map[string]interface{}{"testfloat": float64(100.0211508)},
 					Data:      100.0211508,
 					Unit:      "float",
@@ -33,7 +32,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_inbound_objects metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_objects"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_objects"),
 					Config:    map[string]interface{}{"testfloat": float64(0)},
 					Data:      0,
 					Unit:      "float",
@@ -49,7 +48,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_inbound_values metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_inbound_values"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "inbound_values"),
 					Config:    map[string]interface{}{"testfloat": float64(0.00077732235)},
 					Data:      0.00077732235,
 					Unit:      "float",
@@ -65,7 +64,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_outbound_bytes metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_bytes"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_bytes"),
 					Config:    map[string]interface{}{"testfloat": float64(1)},
 					Data:      1,
 					Unit:      "float",
@@ -81,7 +80,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_outbound_objects metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_objects"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_objects"),
 					Config:    map[string]interface{}{"testfloat": float64(10656)},
 					Data:      10656,
 					Unit:      "float",
@@ -97,7 +96,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_outbound_values metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_outbound_values"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "outbound_values"),
 					Config:    map[string]interface{}{"testfloat": float64(36.37)},
 					Data:      36.37,
 					Unit:      "float",
@@ -113,7 +112,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake dra_pending_replication_syncs metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra_pending_replication_syncs"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "dra", "pending_replication_syncs"),
 					Config:    map[string]interface{}{"testfloat": float64(0)},
 					Data:      0,
 					Unit:      "float",
@@ -129,7 +128,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ds_client_binds metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_client_binds"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "client_binds"),
 					Config:    map[string]interface{}{"testfloat": float64(1.42)},
 					Data:      1.42,
 					Unit:      "float",
@@ -145,7 +144,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ds_directory_reads metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_reads"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_reads"),
 					Config:    map[string]interface{}{"testfloat": float64(668074.8282)},
 					Data:      668074.8282,
 					Unit:      "float",
@@ -161,7 +160,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ds_directory_searches metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_searches"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_searches"),
 					Config:    map[string]interface{}{"testfloat": float64(24768.5784167836)},
 					Data:      24768.5784167836,
 					Unit:      "float",
@@ -177,7 +176,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ds_directory_writes metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds_directory_writes"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ds", "directory_writes"),
 					Config:    map[string]interface{}{"testfloat": float64(0.78)},
 					Data:      0.78,
 					Unit:      "float",
@@ -193,7 +192,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake kdc_as_requests metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc_as_requests"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc", "as_requests"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -209,7 +208,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake kdc_tgs_requests metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc_tgs_requests"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "kdc", "tgs_requests"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -225,7 +224,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake kerberos_authentications metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "kerberos_authentications"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "kerberos", "authentications"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -241,7 +240,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ldap_bind_time metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_bind_time"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "bind_time"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -257,7 +256,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ldap_client_session metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_client_session"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "client_session"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -273,7 +272,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ldap_searches metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_searches"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "searches"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -289,7 +288,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ldap_successful_binds metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_successful_binds"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "successful_binds"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",
@@ -305,7 +304,7 @@ func TestActiveDirectoryCollector(t *testing.T) {
 			metrics := []plugin.Metric{
 				// Create fake ldap_writes metric to make sure the CollectMetrics function is functioning correctly and returns how it should
 				plugin.Metric{
-					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap_writes"),
+					Namespace: plugin.NewNamespace("intel", "activedirectory", "ldap", "writes"),
 					Config:    map[string]interface{}{"testfloat": float64(50.724595)},
 					Data:      50.724595,
 					Unit:      "float",

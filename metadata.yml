@@ -6,3 +6,4 @@ description: "Collects Windows Active Directory metrics"
 badge:
 ci:
 status: "Experimental"  
+  
